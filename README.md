@@ -18,4 +18,6 @@ Contributions are welcome! If you have improvements or additional infrastructure
 
 ## License
 
-This repository is licensed under the [MIT License](https://opensource.org/licenses/MIT). See the `LICENSE` file for details.
+This repository is licensed under the [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0). 
+This software is provided "AS IS", without warranties or conditions of any kind, either express or implied.
+See the `LICENSE` file for details.
