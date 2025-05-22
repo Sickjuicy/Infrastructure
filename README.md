@@ -18,10 +18,6 @@ Contributions are welcome! If you have improvements or additional infrastructure
 
 ## License
 
-<<<<<<< HEAD
 This repository is licensed under the [Apache License 2.0](https://github.com/Sickjuicy/Infrastructure/blob/main/LICENSE). 
-=======
-This repository is licensed under the [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0](https://github.com/Sickjuicy/Infrastructure/blob/main/LICENSE). 
->>>>>>> bcc0384f9040839115f44c294ff69a46be02d10d
 This software is provided "AS IS", without warranties or conditions of any kind, either express or implied.
 See the `LICENSE` file for details.
