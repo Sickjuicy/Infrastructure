@@ -1,0 +1,82 @@
+services:
+  museum:
+    image: ghcr.io/ente-io/server
+    ports:
+      - 8080:8080 # API
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./museum.yaml:/museum.yaml:ro
+      - ./data:/data:ro
+
+  # Resolve "localhost:3200" in the museum container to the minio container.
+  socat:
+    image: alpine/socat
+    network_mode: service:museum
+    depends_on: [museum]
+    command: "TCP-LISTEN:3200,fork,reuseaddr TCP:minio:3200"
+
+  web:
+    image: ghcr.io/ente-io/web
+    # Uncomment what you need to tweak.
+    ports:
+      - 3000:3000 # Photos web app
+      # - 3001:3001 # Accounts
+      # - 3002:3002 # Public albums
+      - 3003:3003 # Auth
+      # - 3004:3004 # Cast
+    environment:
+        ENTE_API_ORIGIN: "https://ente.entxample.com"  # Points to API # ADDED
+        ENTE_WEB_ORIGIN: "https://ente-photos.entxample.com"  # Photos app domain # ADDED
+        ENTE_AUTH_ORIGIN: "https://ente-auth.entxample.com"  # Auth domain # ADDED
+        NEXT_PUBLIC_IS_SELF_HOSTED: "true"  # Disable ente.io redirects # ADDED
+
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: pguser
+      POSTGRES_PASSWORD: [GENERATED}
+      POSTGRES_DB: ente_db
+    healthcheck:
+      test: pg_isready -q -d ente_db -U pguser
+      start_period: 40s
+      start_interval: 1s
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data # Changed
+
+  minio:
+    image: minio/minio
+    ports:
+      - 3200:3200 # MinIO API
+      - 3201:3201 # ADDED # Console Port
+    environment:
+      MINIO_ROOT_USER: [GENERATED}
+      MINIO_ROOT_PASSWORD: [GENERATED}
+      MINIO_SERVER_URL: "https://minio.entxample.com" # ADDED
+      MINIO_BROWSER: "on" # ADDED
+      MINIO_BROWSER_REDIRECT_URL: "https://minio-console.entxample.com"  # ADDED
+    command: server /data --address ":3200" --console-address ":3201"
+    volumes:
+      - ./minio-data:/data # Changed
+    post_start:
+      - command: |
+          sh -c '
+          #!/bin/sh
+
+          while ! mc config host add h0 http://minio:3200 [GENERATED} [GENERATED} 2>/dev/null
+          do
+            echo "Waiting for minio..."
+            sleep 0.5
+          done
+
+          cd /data
+
+          mc mb -p b2-eu-cen
+          mc mb -p wasabi-eu-central-2-v3
+          mc mb -p scw-eu-fr-v3
+          '
+
+#volumes:
+#  postgres-data:
+#  minio-data:

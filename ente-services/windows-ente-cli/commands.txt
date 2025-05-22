@@ -1,0 +1,6 @@
+.\ente.exe account add [CLI-USERNAME]
+
+.\ente.exe admin update-subscription -a [AdminAccountMail] -u [UserAccountMail] --no-limit true
+
+.\ente.exe admin update-subscription -a [AdminAccountMail] -u [UserAccountMail] --no-limit true
+

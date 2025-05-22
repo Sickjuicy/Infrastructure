@@ -1,0 +1,47 @@
+key:
+      encryption: [GENERATED}
+      hash: [GENERATED}
+
+jwt:
+      secret: [GENERATED}
+
+db:
+      host: postgres
+      port: 5432
+      name: ente_db
+      user: pguser
+      password: [GENERATED}
+
+s3:
+      are_local_buckets: true
+      b2-eu-cen:
+         key: [GENERATED}
+         secret: [GENERATED}
+         endpoint: https://minio.entxample.com # CHANGED
+         region: eu-central-2
+         bucket: b2-eu-cen
+      wasabi-eu-central-2-v3:
+         key: [GENERATED}
+         secret: [GENERATED}
+         endpoint: localhost:3200
+         region: eu-central-2
+         bucket: wasabi-eu-central-2-v3
+         compliance: false
+      scw-eu-fr-v3:
+         key: [GENERATED}
+         secret: [GENERATED}
+         endpoint: localhost:3200
+         region: eu-central-2
+         bucket: scw-eu-fr-v3
+
+http:
+  use-tls: false  # Using Caddy for SSL
+  cors:
+    allowed-origins:
+      - "*"
+    allowed-methods: "GET,POST,PUT,DELETE,OPTIONS"
+    allowed-headers: "Content-Type,Authorization,X-Auth-Token,X-Client-Package"
+    expose-headers: "ETag,X-Amz-Request-Id"
+    max-age: "3000"
+replication:
+  enabled: false
