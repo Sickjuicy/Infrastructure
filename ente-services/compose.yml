@@ -1,5 +1,6 @@
 services:
   museum:
+    restart: unless-stopped
     image: ghcr.io/ente-io/server
     ports:
       - 8080:8080 # API
@@ -12,12 +13,14 @@ services:
 
   # Resolve "localhost:3200" in the museum container to the minio container.
   socat:
+    restart: unless-stopped
     image: alpine/socat
     network_mode: service:museum
     depends_on: [museum]
     command: "TCP-LISTEN:3200,fork,reuseaddr TCP:minio:3200"
 
   web:
+    restart: unless-stopped
     image: ghcr.io/ente-io/web
     # Uncomment what you need to tweak.
     ports:
@@ -33,6 +36,7 @@ services:
         NEXT_PUBLIC_IS_SELF_HOSTED: "true"  # Disable ente.io redirects # ADDED
 
   postgres:
+    restart: unless-stopped
     image: postgres:15
     environment:
       POSTGRES_USER: pguser
@@ -46,6 +50,7 @@ services:
       - ./postgres-data:/var/lib/postgresql/data # Changed
 
   minio:
+    restart: unless-stopped
     image: minio/minio
     ports:
       - 3200:3200 # MinIO API
